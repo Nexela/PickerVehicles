@@ -19,6 +19,13 @@ data:extend {
         setting_type = 'startup',
         default_value = true,
         order = 'picker[startup][better-car-lights]'
+    },
+    {
+        type = 'bool-setting',
+        name = 'picker-unstoppable-trains',
+        setting_type = 'startup',
+        default_value = false,
+        order = 'picker[startup][unstoppable-trains]'
     }
 }
 

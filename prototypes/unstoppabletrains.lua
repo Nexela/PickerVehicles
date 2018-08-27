@@ -5,7 +5,7 @@
     "contact": "Skyshrim@gmail.com",
     "description": "CHANGES the base stats of the locomotive to reduce their vulurability to enemies.",
 ]]
-local Data = require('__stdlib__/data/data')
+local Data = require('__stdlib__/stdlib/data/data')
 
 if settings.startup['picker-unstoppable-trains'].value then
     local loco = Data('locomotive', 'locomotive')

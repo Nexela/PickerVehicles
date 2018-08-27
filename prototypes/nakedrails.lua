@@ -4,7 +4,7 @@
     "author": "futileohm",
     "description": "Convert standard rails to naked rails, removing the gravel and/or sleepers. Can also change rails to rail remnants for a destroyed look."
 --]]
-local Data = require('__stdlib__/data/data')
+local Data = require('__stdlib__/stdlib/data/data')
 
 local naked_subelements = {'ties', 'stone_path', 'stone_path_background'}
 local sleepy_subelements = {'stone_path', 'stone_path_background'}

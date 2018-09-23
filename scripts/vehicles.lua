@@ -62,8 +62,7 @@ local function on_player_driving_changed_state(event)
         --Set train to manual
         if #train.passengers == 1 and available_train(train) then
             player.vehicle.train.manual_mode = true
-            player.vehicle.surface.create_entity {
-                name = 'flying-text',
+            player.create_local_flying_text {
                 text = {'vehicles.manual-mode'},
                 position = player.vehicle.position,
                 color = defines.color.green
@@ -79,8 +78,7 @@ local function toggle_train_control(event)
     if player.vehicle and player.vehicle.train and not (player.selected and player.selected.type == 'train-stop') then
         player.vehicle.train.manual_mode = not player.vehicle.train.manual_mode
         local text = player.vehicle.train.manual_mode and {'vehicles.manual-mode'} or {'vehicles.automatic-mode'}
-        player.vehicle.surface.create_entity {
-            name = 'flying-text',
+        player.create_local_flying_text {
             text = text,
             position = player.vehicle.position,
             color = defines.color.green
@@ -104,8 +102,7 @@ local function goto_next_station(event)
             end
             train.schedule = schedule
             train.manual_mode = false
-            player.vehicle.surface.create_entity {
-                name = 'flying-text',
+            player.create_local_flying_text{
                 text = 'Next station',
                 position = player.vehicle.position,
                 color = defines.color.green

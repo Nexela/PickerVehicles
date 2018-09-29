@@ -81,8 +81,7 @@ do --(( naked-rail
     end --))
 
     --(( curved-rail
-    local curved = CURVED:copy('picker-naked-curved-rail', 'rail')
-    curved.placeable_by.item = 'picker-naked-rail'
+    local curved = CURVED:copy('picker-naked-curved-rail', 'rail'):log()
     curved.corpse = 'picker-naked-curved-rail-remnants'
     curved.pictures['rail_endings'].sheets[1].filename = '__PickerVehicles__/graphics/nakedrails/rail-endings-transparent.png'
     curved.pictures['rail_endings'].sheets[1].hr_version.filename = '__PickerVehicles__/graphics/nakedrails/hr-rail-endings-transparent.png'
@@ -142,7 +141,6 @@ do --(( sleepy-rail
     --(( curved-rail
     local curved = CURVED:copy('picker-sleepy-curved-rail', 'rail')
     curved.corpse = 'picker-sleepy-curved-rail-remnants'
-    curved.placeable_by.item = 'picker-sleepy-rail'
 
     curved.pictures['rail_endings'].sheets[1].filename = '__PickerVehicles__/graphics/nakedrails/rail-endings-transparent.png'
     curved.pictures['rail_endings'].sheets[1].hr_version.filename = '__PickerVehicles__/graphics/nakedrails/hr-rail-endings-transparent.png'

@@ -81,7 +81,7 @@ do --(( naked-rail
     end --))
 
     --(( curved-rail
-    local curved = CURVED:copy('picker-naked-curved-rail', 'rail'):log()
+    local curved = CURVED:copy('picker-naked-curved-rail', 'rail')
     curved.corpse = 'picker-naked-curved-rail-remnants'
     curved.pictures['rail_endings'].sheets[1].filename = '__PickerVehicles__/graphics/nakedrails/rail-endings-transparent.png'
     curved.pictures['rail_endings'].sheets[1].hr_version.filename = '__PickerVehicles__/graphics/nakedrails/hr-rail-endings-transparent.png'

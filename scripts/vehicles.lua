@@ -72,21 +72,6 @@ local function on_player_driving_changed_state(event)
 end
 Event.register(defines.events.on_player_driving_changed_state, on_player_driving_changed_state)
 
--- Hotkey for toggling a train between automatic and manual.
-local function toggle_train_control(event)
-    local player = game.players[event.player_index]
-    if player.vehicle and player.vehicle.train and not (player.selected and player.selected.type == 'train-stop') then
-        player.vehicle.train.manual_mode = not player.vehicle.train.manual_mode
-        local text = player.vehicle.train.manual_mode and {'vehicles.manual-mode'} or {'vehicles.automatic-mode'}
-        player.create_local_flying_text {
-            text = text,
-            position = player.vehicle.position,
-            color = defines.color.green
-        }
-    end
-end
-Event.register('picker-toggle-train-control', toggle_train_control)
-
 -- Force the train to go to the next station.
 local function goto_next_station(event)
     local player = game.players[event.player_index]
@@ -111,6 +96,25 @@ local function goto_next_station(event)
     end
 end
 Event.register('picker-goto-next-station', goto_next_station)
+
+-- Hotkey for toggling a train between automatic and manual.
+local function toggle_train_control(event)
+    local player = game.players[event.player_index]
+    local train = player.vehicle and player.vehicle.train
+    if train and not (player.selected and player.selected.type == 'train-stop') then
+        train.manual_mode = not train.manual_mode
+        local text = train.manual_mode and {'vehicles.manual-mode'} or {'vehicles.automatic-mode'}
+        if not train.manual_mode then
+            goto_next_station(event)
+        end
+        player.create_local_flying_text {
+            text = text,
+            position = player.vehicle.position,
+            color = defines.color.green
+        }
+    end
+end
+Event.register('picker-toggle-train-control', toggle_train_control)
 
 -- Hotkey while selecting a station will tell the train to go to that station if
 -- the train has 1 or fewer stations.

@@ -3,3 +3,12 @@ Version: 1.0.0
 Date: ??????
   Features:
     - Seperated into its own mod.
+    - Customizable train pathfind penalties.
+    - Customizable train horns.
+    - Horns can attract enemies (if enabled).
+    - Horn sounds when a player dies to a train.
+    - Cars and tanks snap to grid slightly when driving.
+    - Wheres my car keybind, draws an arrow and a map alert on your last car.
+    - Rail Tools for decorating rails.
+    - Smart manual train.
+    - Train goto station/next station.

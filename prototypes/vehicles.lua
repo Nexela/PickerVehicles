@@ -11,3 +11,4 @@ Data {type = 'sound', name = 'deltic-stop', filename = '__PickerVehicles__/sound
 Data {type = 'sound', name = 'train-stop', filename = '__PickerVehicles__/sounds/honk_long.ogg'}
 Data {type = 'sound', name = 'train-start', filename = '__PickerVehicles__/sounds/honk_2x.ogg'}
 Data {type = 'sound', name = 'car-horn', filename = '__PickerVehicles__/sounds/horn_honk.ogg'}
+Data {type = 'sound', name = 'horn-long', filename = '__PickerVehicles__/sounds/horn_xlong.ogg'}

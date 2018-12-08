@@ -48,6 +48,13 @@ local available_ts = {
     [defines.train_state.no_path] = true
 }
 
+local consist = {
+    ['locomotive'] = true,
+    ['cargo-wagon'] = true,
+    ['fluid-wagon'] = true,
+    ['artillery-wagon'] = true
+}
+
 -- Is the train available for automatic to manual control.
 local function available_train(train)
     return available_ts[train.state] or (train.state == ts.wait_station and #train.schedule.records == 1)
@@ -219,6 +226,27 @@ end
 Event.register('picker-honk', manual_honk)
 
 --[[
+    "name": "Better-TrainHorn",
+    "title": "Better Train Horn",
+    "author": "Luc Mellee",
+    "contact": "melleeluc@gmail.com",
+    "description": "This mod is a updated version of Benjamin Lee's TrainHorn mod
+    Original Description: \n Trains will now blare their horn after killing a player (sound by CrazyWashingtonianTrainNut on freesound)"
+--]]
+local function casey_jones(event)
+    local cause = event.cause
+    if cause and consist[cause.type] then
+        cause.surface.play_sound {
+            path = 'horn-long',
+            position = cause.position,
+            volume = 1
+        }
+        attract_enemies(cause, 50)
+    end
+end
+Event.register(defines.events.on_player_died, casey_jones)
+
+--[[
   "name": "VehicleSnap",
   "author": "Zaflis",
   "homepage": "https://forums.factorio.com/viewtopic.php?f=92&t=25501",
@@ -237,16 +265,16 @@ local function snap_vehicle(event)
         local vehicle = player.vehicle
         if player and vehicle and vehicle.type == 'car' and vehicle.speed > 0.1 then
             local o = vehicle.orientation
-        local last_o = pdata._last_orientation
+            local last_o = pdata._last_orientation
             if last_o and math.abs(o - last_o) < 0.001 then
-            local snap_o = math.floor(o * SNAP_AMOUNT + 0.5) / SNAP_AMOUNT
-            -- Interpolate with 80% current and 20% target orientation
-            o = (o * 4.0 + snap_o) * 0.2
+                local snap_o = math.floor(o * SNAP_AMOUNT + 0.5) / SNAP_AMOUNT
+                -- Interpolate with 80% current and 20% target orientation
+                o = (o * 4.0 + snap_o) * 0.2
                 vehicle.orientation = o
+            end
+            pdata._last_orientation = o
         end
-        pdata._last_orientation = o
     end
-end
 end
 Event.register(defines.events.on_player_changed_position, snap_vehicle)
 

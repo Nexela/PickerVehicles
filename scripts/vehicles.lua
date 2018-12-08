@@ -87,7 +87,7 @@ local function goto_next_station(event)
             end
             train.schedule = schedule
             train.manual_mode = false
-            player.create_local_flying_text{
+            player.create_local_flying_text {
                 text = 'Next station',
                 position = player.vehicle.position,
                 color = defines.color.green
@@ -229,32 +229,36 @@ Event.register('picker-honk', manual_honk)
 -- car will slowly turn towards such angle axis
 local SNAP_AMOUNT = 16
 
+Player.additional_data{snap = true}
+
 local function snap_vehicle(event)
     local player, pdata = Player.get(event.player_index)
-    if player and player.vehicle and player.vehicle.type == 'car' and not player.vehicle.train and player.vehicle.speed > 0.1 then
-        local o = player.vehicle.orientation
+    if pdata.snap then
+        local vehicle = player.vehicle
+        if player and vehicle and vehicle.type == 'car' and vehicle.speed > 0.1 then
+            local o = vehicle.orientation
         local last_o = pdata._last_orientation
-        if last_o and pdata.snap ~= false and math.abs(o - last_o) < 0.001 then
+            if last_o and math.abs(o - last_o) < 0.001 then
             local snap_o = math.floor(o * SNAP_AMOUNT + 0.5) / SNAP_AMOUNT
             -- Interpolate with 80% current and 20% target orientation
             o = (o * 4.0 + snap_o) * 0.2
-            player.vehicle.orientation = o
+                vehicle.orientation = o
         end
         pdata._last_orientation = o
     end
+end
 end
 Event.register(defines.events.on_player_changed_position, snap_vehicle)
 
 local function toggle_snap(command)
     local player, pdata = Player.get(command.player_index)
     pdata.snap = not pdata.snap
-    player.print({'', tostring(pdata.snap)})
+    player.print({'vehicles.snapping', tostring(pdata.snap)})
 end
 commands.add_command('snap', 'snapdriving', toggle_snap)
 
 -- INIT -----------------------------------------------------------------------
 local function init_and_config()
     global.recently_honked = global.recently_honked or {}
-    Player.add_data_all({snap = true})
 end
 Event.register(Event.core_events.init_and_config, init_and_config)

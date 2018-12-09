@@ -1,3 +1,5 @@
+require('__stdlib__/stdlib/event/player').register_events(true)
+
 require('scripts/vehicles')
 require('scripts/nakedrails')
 

@@ -6,19 +6,35 @@
     Adds toggle train mode hotkey
     Adds automatic train mode toggling
 ]]
-local Event = require('__stdlib__/stdlib/event/event')
-local Player = require('__stdlib__/stdlib/event/player').register_events(true)
-
 --[[
 	"name": "DelticHonk",
 	"title": "Deltic Honk",
 	"author": "Michael Cowgill (ChurchOrganist)",
 	"contact": "jmcowgill@gmail.com",
-	"description": [[
-        blatant hack of Gotlag's original Honk mod which changes the sounds to Deltic horns.
-        Trains honk when stopping. And starting. And on command.
-    ]]
---]
+	"description": "blatant hack of Gotlag's original Honk mod which changes the sounds to Deltic horns.
+    Trains honk when stopping. And starting. And on command."
+
+    "name": "Horns",
+	"title": "Horns",
+	"author": "TaxiService",
+	"homepage": "https://forums.factorio.com/viewtopic.php?f=190&t=59417",
+	"description": "Adds horns to cars and tanks. Honking can attract enemies in a tweakable radius.",
+
+    "name": "Better-TrainHorn",
+    "title": "Better Train Horn",
+    "author": "Luc Mellee",
+    "contact": "melleeluc@gmail.com",
+    "description": "This mod is a updated version of Benjamin Lee's TrainHorn mod
+    Original Description: \n Trains will now blare their horn after killing a player (sound by CrazyWashingtonianTrainNut on freesound)"
+
+    "name": "VehicleSnap",
+    "author": "Zaflis",
+    "homepage": "https://forums.factorio.com/viewtopic.php?f=92&t=25501",
+    "description": "Snaps movement angle when driving cars or tanks.",
+--]]
+local Event = require('__stdlib__/stdlib/event/event')
+local Player = require('__stdlib__/stdlib/event/player')
+local interface = require('__stdlib__/stdlib/scripts/interface')
 
 local function attract_enemies(entity, range)
     if settings.global['picker-train-honk-attract'].value then
@@ -161,7 +177,7 @@ local function wheres_my_car(event)
         pdata.last_car = selected
     elseif event.input_name and pdata.last_car and pdata.last_car.valid and player.surface == pdata.last_car.surface then
         if not (pdata.car_finder_beam and pdata.car_finder_beam.valid) then
-        player.add_custom_alert(pdata.last_car, {type = 'item', name = pdata.last_car.name}, {'vehicles.dude-wheres-my-car'}, true)
+            player.add_custom_alert(pdata.last_car, {type = 'item', name = pdata.last_car.name}, {'vehicles.dude-wheres-my-car'}, true)
             pdata.car_finder_beam =
                 player.surface.create_entity(
                 {
@@ -185,6 +201,7 @@ local function attempt_honk(event)
     if honk_states[event.train.state] and settings.global['picker-train-honk'].value then
         local honk = settings.global['picker-train-honk-type'].value .. (event.name == defines.train_state.on_the_path and '-start' or '-stop')
         local entity
+        global.recently_honked = global.recently_honked or {}
         if (global.recently_honked[event.train.id] or event.tick) <= event.tick then
             if event.train.speed >= 0 and #event.train.locomotives.front_movers > 0 then
                 entity = event.train.locomotives.front_movers[1]
@@ -249,14 +266,6 @@ local function manual_honk(event)
 end
 Event.register('picker-honk', manual_honk)
 
---[[
-    "name": "Better-TrainHorn",
-    "title": "Better Train Horn",
-    "author": "Luc Mellee",
-    "contact": "melleeluc@gmail.com",
-    "description": "This mod is a updated version of Benjamin Lee's TrainHorn mod
-    Original Description: \n Trains will now blare their horn after killing a player (sound by CrazyWashingtonianTrainNut on freesound)"
---]]
 local function casey_jones(event)
     local cause = event.cause
     if cause and consist[cause.type] then
@@ -270,33 +279,29 @@ local function casey_jones(event)
 end
 Event.register(defines.events.on_player_died, casey_jones)
 
---[[
-  "name": "VehicleSnap",
-  "author": "Zaflis",
-  "homepage": "https://forums.factorio.com/viewtopic.php?f=92&t=25501",
-  "description": "Snaps movement angle when driving cars or tanks.",
---]]
 -- snap amount is the amount of different angles car can drive on,
 -- (360 / vehiclesnap_amount) is the difference between 2 axis
 -- car will slowly turn towards such angle axis
 local SNAP_AMOUNT = 16
 
-Player.additional_data{snap = true}
+Player.additional_data {snap = true}
 
 local function snap_vehicle(event)
-    local player, pdata = Player.get(event.player_index)
-    if pdata.snap then
-        local vehicle = player.vehicle
-        if player and vehicle and vehicle.type == 'car' and vehicle.speed > 0.1 then
-            local o = vehicle.orientation
-            local last_o = pdata._last_orientation
-            if last_o and math.abs(o - last_o) < 0.001 then
-                local snap_o = math.floor(o * SNAP_AMOUNT + 0.5) / SNAP_AMOUNT
-                -- Interpolate with 80% current and 20% target orientation
-                o = (o * 4.0 + snap_o) * 0.2
-                vehicle.orientation = o
+    if not global.disable_snapping then
+        local player, pdata = Player.get(event.player_index)
+        if pdata.snap then
+            local vehicle = player.vehicle
+            if player and vehicle and vehicle.type == 'car' and vehicle.speed > 0.1 then
+                local o = vehicle.orientation
+                local last_o = pdata._last_orientation
+                if last_o and math.abs(o - last_o) < 0.001 then
+                    local snap_o = math.floor(o * SNAP_AMOUNT + 0.5) / SNAP_AMOUNT
+                    -- Interpolate with 80% current and 20% target orientation
+                    o = (o * 4.0 + snap_o) * 0.2
+                    vehicle.orientation = o
+                end
+                pdata._last_orientation = o
             end
-            pdata._last_orientation = o
         end
     end
 end
@@ -309,8 +314,6 @@ local function toggle_snap(command)
 end
 commands.add_command('snap', 'snapdriving', toggle_snap)
 
--- INIT -----------------------------------------------------------------------
-local function init_and_config()
-    global.recently_honked = global.recently_honked or {}
+function interface.disable_snapping(bool)
+    global.disable_snapping = bool or false
 end
-Event.register(Event.core_events.init_and_config, init_and_config)

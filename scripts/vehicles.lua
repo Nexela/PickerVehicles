@@ -144,14 +144,38 @@ end
 Event.register('picker-goto-station', goto_station)
 
 -- Create a custom alert to help find the last car you were in.
+local function remove_beam(pdata)
+    if pdata.car_finder_beam and pdata.car_finder_beam.valid then
+        pdata.car_finder_beam.destroy()
+    end
+    pdata.car_finder_beam = nil
+end
+
 local function wheres_my_car(event)
     local player, pdata = Player.get(event.player_index)
-    if not event.input and player.vehicle and player.vehicle.type == 'car' then
-        pdata.last_car = player.vehicle
-    elseif player.selected and player.selected.type == 'car' then
-        pdata.last_car = player.selected
-    elseif event.input_name and pdata.last_car and pdata.last_car.valid then
+    local vehicle, selected = player.vehicle, player.selected
+    if not event.input and vehicle and vehicle.type == 'car' then
+        pdata.last_car = vehicle
+        remove_beam(pdata)
+    elseif selected and selected.type == 'car' then
+        pdata.last_car = selected
+    elseif event.input_name and pdata.last_car and pdata.last_car.valid and player.surface == pdata.last_car.surface then
+        if not (pdata.car_finder_beam and pdata.car_finder_beam.valid) then
         player.add_custom_alert(pdata.last_car, {type = 'item', name = pdata.last_car.name}, {'vehicles.dude-wheres-my-car'}, true)
+            pdata.car_finder_beam =
+                player.surface.create_entity(
+                {
+                    name = 'picker-pointer-beam',
+                    position = player.position, -- Can be any position, not used for beams, just can't be nil
+                    source = player.character,
+                    source_offset = {0, -1},
+                    target = pdata.last_car,
+                    duration = 2000000000
+                }
+            )
+        elseif pdata.car_finder_beam then
+            remove_beam(pdata)
+        end
     end
 end
 Event.register({'picker-dude-wheres-my-car', defines.events.on_player_driving_changed_state}, wheres_my_car)

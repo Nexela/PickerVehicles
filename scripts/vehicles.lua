@@ -5,7 +5,7 @@
     Adds goto selected station hotkey when inside a train
     Adds toggle train mode hotkey
     Adds automatic train mode toggling
-]]
+--]]
 --[[
 	"name": "DelticHonk",
 	"title": "Deltic Honk",

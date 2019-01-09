@@ -179,7 +179,7 @@ do --(( Selection Tools
     Data {
         type = 'selection-tool',
         name = 'picker-naked-rails-stoneify',
-        flags = {'goes-to-quickbar', 'hidden', 'only-in-cursor'},
+        flags = {'hidden', 'only-in-cursor'},
         subgroup = 'transport',
         stack_size = 1,
         stackable = false,
@@ -209,7 +209,7 @@ do --(( Selection Tools
     Data {
         type = 'selection-tool',
         name = 'picker-naked-rails-sleepify',
-        flags = {'goes-to-quickbar', 'hidden', 'only-in-cursor'},
+        flags = {'hidden', 'only-in-cursor'},
         subgroup = 'transport',
         stack_size = 1,
         stackable = false,
@@ -234,7 +234,7 @@ do --(( Selection Tools
     Data {
         type = 'selection-tool',
         name = 'picker-naked-rails-nakedify',
-        flags = {'goes-to-quickbar', 'hidden', 'only-in-cursor'},
+        flags = {'hidden', 'only-in-cursor'},
         subgroup = 'transport',
         stack_size = 1,
         stackable = false,
@@ -260,7 +260,7 @@ do --(( Selection Tools
     Data {
         type = 'selection-tool',
         name = 'picker-naked-rails-remnantify',
-        flags = {'goes-to-quickbar', 'hidden', 'only-in-cursor'},
+        flags = {'hidden', 'only-in-cursor'},
         subgroup = 'transport',
         stack_size = 1,
         stackable = false,

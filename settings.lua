@@ -4,103 +4,113 @@ data:extend {
         name = 'picker-naked-rails',
         setting_type = 'startup',
         default_value = true,
-        order = 'picker[startup][naked-rails]'
+        order = '[startup]-z-[naked-rails]'
     },
     {
         type = 'bool-setting',
         name = 'picker-better-lights-cars',
         setting_type = 'startup',
         default_value = true,
-        order = 'picker[startup][better-car-lights]'
+        order = '[startup]-z-[better-car-lights]'
     },
     {
         type = 'bool-setting',
         name = 'picker-better-lights-trains',
         setting_type = 'startup',
         default_value = true,
-        order = 'picker[startup][better-car-lights]'
+        order = '[startup]-z-[better-train-lights]'
     },
     {
         type = 'bool-setting',
         name = 'picker-unstoppable-trains',
         setting_type = 'startup',
         default_value = false,
-        order = 'picker[startup][unstoppable-trains]'
+        order = '[startup]-z-[unstoppable-trains]'
     }
 }
 
 data:extend {
-    {
-        type = "int-setting",
-        name = "picker-trainstop-penalty",
-        setting_type = "startup",
-        default_value = 2000,
-        minimum_value = 1,
-        maximum_value = 60000,
-     },
      {
         type = "int-setting",
         name = "picker-manual-withplayer-penalty",
         setting_type = "startup",
         default_value = 2000,
-        minimum_value = 1,
+        minimum_value = 0,
         maximum_value = 60000,
+        order = '[startup]-a-[penalty]-a'
      },
      {
         type = "int-setting",
         name = "picker-manual-noplayer-penalty",
         setting_type = "startup",
         default_value = 7000,
-        minimum_value = 1,
+        minimum_value = 0,
         maximum_value = 60000,
+        order = '[startup]-a-[penalty]-b'
      },
      {
         type = "int-setting",
         name = "picker-circuit-penalty",
         setting_type = "startup",
         default_value = 1000,
-        minimum_value = 1,
+        minimum_value = 0,
         maximum_value = 60000,
+        order = '[startup]-a-[penalty]-c'
      },
      {
         type = "int-setting",
-        name = "picker-train-waitstation-penalty",
+        name = "picker-trainstop-penalty",
         setting_type = "startup",
-        default_value = 500,
-        minimum_value = 1,
+        default_value = 2000,
+        minimum_value = 0,
         maximum_value = 60000,
-     },
-     {
-        type = "int-setting",
-        name = "picker-train-waitstation-nostops-penalty",
-        setting_type = "startup",
-        default_value = 1000,
-        minimum_value = 1,
-        maximum_value = 60000,
+        order = '[startup]-a-[penalty]-d'
      },
      {
         type = "int-setting",
         name = "picker-arriving-stop-penalty",
         setting_type = "startup",
         default_value = 100,
-        minimum_value = 1,
+        minimum_value = 0,
         maximum_value = 60000,
+        order = '[startup]-a-[penalty]-e'
      },
+     {
+        type = "int-setting",
+        name = "picker-train-waitstation-penalty",
+        setting_type = "startup",
+        default_value = 500,
+        minimum_value = 0,
+        maximum_value = 60000,
+        order = '[startup]-a-[penalty]-f'
+     },
+     {
+        type = "int-setting",
+        name = "picker-train-waitstation-nostops-penalty",
+        setting_type = "startup",
+        default_value = 1000,
+        minimum_value = 0,
+        maximum_value = 60000,
+        order = '[startup]-a-[penalty]-g'
+     },
+
      {
         type = "int-setting",
         name = "picker-arriving-signal-penalty",
         setting_type = "startup",
         default_value = 100,
-        minimum_value = 1,
+        minimum_value = 0,
         maximum_value = 60000,
+        order = '[startup]-a-[penalty]-h'
      },
      {
         type = "int-setting",
         name = "picker-waiting-signal-penalty",
         setting_type = "startup",
         default_value = 100,
-        minimum_value = 1,
+        minimum_value = 0,
         maximum_value = 60000,
+        order = '[startup]-a-[penalty]-i'
      },
      {
         type = "double-setting",
@@ -109,6 +119,7 @@ data:extend {
         default_value = 0.1,
         minimum_value = 0.001,
         maximum_value = 100,
+        order = '[startup]-a-[penalty]-j'
       }
 }
 

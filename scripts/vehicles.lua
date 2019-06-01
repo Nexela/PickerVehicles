@@ -317,3 +317,30 @@ commands.add_command('snap', 'snapdriving', toggle_snap)
 function interface.disable_snapping(bool)
     global.disable_snapping = bool or false
 end
+
+--[[
+	"name": "auto_manual_mode",
+	"title": "Auto Manual Mode",
+	"author": "Roy Scheerens",
+	"description": "When in a train, using the movement controls will automatically set the train in manual mode.",
+--]]
+if settings.startup['picker-manual-train-keys'].value then
+    local function set_to_manual(event)
+        local player = game.get_player(event.player_index)
+        local vehicle = player.vehicle
+
+        if vehicle then
+            local train = vehicle.train
+            if train and not train.manual_mode and player.render_mode == defines.render_mode.game then
+                train.manual_mode = true
+                player.create_local_flying_text {
+                    text = {'vehicles.manual-mode'},
+                    position = vehicle.position,
+                    color = defines.color.green
+                }
+            end
+        end
+    end
+    local keys = {'picker-up-event', 'picker-down-event', 'picker-left-event', 'picker-right-event'}
+    Event.register(keys, set_to_manual)
+end

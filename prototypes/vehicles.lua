@@ -6,6 +6,13 @@ Data {type = 'custom-input', name = 'picker-goto-station', key_sequence = 'J'}
 Data {type = 'custom-input', name = 'picker-goto-next-station', key_sequence = 'SHIFT + J'}
 Data {type = 'custom-input', name = 'picker-honk', key_sequence = 'H'}
 
+if settings.startup['picker-manual-train-keys'].value then
+    Data {type = 'custom-input', name = 'picker-up-event', linked_game_control = 'move-up', key_sequence = ''}
+    Data {type = 'custom-input', name = 'picker-down-event', linked_game_control = 'move-down', key_sequence = ''}
+    Data {type = 'custom-input', name = 'picker-left-event', linked_game_control = 'move-left', key_sequence = ''}
+    Data {type = 'custom-input', name = 'picker-right-event', linked_game_control = 'move-right', key_sequence = ''}
+end
+
 Data {type = 'sound', name = 'deltic-start', filename = '__PickerVehicles__/sounds/deltic_honk_1.ogg'}
 Data {type = 'sound', name = 'deltic-stop', filename = '__PickerVehicles__/sounds/deltic_honk_2.ogg'}
 Data {type = 'sound', name = 'train-stop', filename = '__PickerVehicles__/sounds/honk_long.ogg'}

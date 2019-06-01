@@ -155,5 +155,12 @@ data:extend {
         setting_type = 'runtime-per-user',
         default_value = true,
         order = 'picker-e[automatic-trains]-a'
+    },
+    {
+        type = 'bool-setting',
+        name = 'picker-manual-train-keys',
+        setting_type = 'startup',
+        default_value = true,
+        order = '[startup]-e-[automatic-trains]-b'
     }
 }

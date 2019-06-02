@@ -95,12 +95,12 @@ local function on_player_driving_changed_state(event)
 end
 Event.register(defines.events.on_player_driving_changed_state, on_player_driving_changed_state)
 
--- Force the train to go to the next station.
+-- Force the train to go to the next station. Check selected trains first
 local function goto_next_station(event)
     local player = game.get_player(event.player_index)
     local vehicle = player.vehicle
     local selected = player.selected
-    local train = vehicle and player.vehicle.train or selected and selected.train
+    local train = selected and selected.train or vehicle and player.vehicle.train
 
     if train and not (selected and selected.type == 'train-stop') then
         local schedule = train.schedule
@@ -128,7 +128,7 @@ local function toggle_train_control(event)
     local player = game.get_player(event.player_index)
     local vehicle = player.vehicle
     local selected = player.selected
-    local train = vehicle and player.vehicle.train or selected and selected.train
+    local train = selected and selected.train or vehicle and player.vehicle.train
 
     if train and not (selected and selected.type == 'train-stop') then
         train.manual_mode = not train.manual_mode

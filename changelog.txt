@@ -3,6 +3,7 @@ Version: 1.0.2
 Date: ??????
   Features:
     - Using movement keys while in automatic mode sets the train to manual.
+    - Friendly trains are somewhat safer (defaults to false).
 ---------------------------------------------------------------------------------------------------
 Version: 1.0.1
 Date: ??????

@@ -162,5 +162,12 @@ data:extend {
         setting_type = 'startup',
         default_value = true,
         order = '[startup]-e-[automatic-trains]-b'
+    },
+    {
+        type = 'bool-setting',
+        name = 'picker-get-out-of-the-way',
+        setting_type = 'runtime-global',
+        default_value = false,
+        order = '[startup]-e-[automatic-trains]-c'
     }
 }

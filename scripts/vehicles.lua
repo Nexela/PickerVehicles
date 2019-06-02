@@ -97,9 +97,12 @@ Event.register(defines.events.on_player_driving_changed_state, on_player_driving
 
 -- Force the train to go to the next station.
 local function goto_next_station(event)
-    local player = game.players[event.player_index]
-    local train = player.vehicle and player.vehicle.train
-    if train and not (player.selected and player.selected.type == 'train-stop') then
+    local player = game.get_player(event.player_index)
+    local vehicle = player.vehicle
+    local selected = player.selected
+    local train = vehicle and player.vehicle.train or selected and selected.train
+
+    if train and not (selected and selected.type == 'train-stop') then
         local schedule = train.schedule
         local stops = #schedule.records
         if stops > 0 then
@@ -112,7 +115,7 @@ local function goto_next_station(event)
             train.manual_mode = false
             player.create_local_flying_text {
                 text = 'Next station',
-                position = player.vehicle.position,
+                position = vehicle and vehicle.position or selected and selected.position,
                 color = defines.color.green
             }
         end
@@ -122,9 +125,12 @@ Event.register('picker-goto-next-station', goto_next_station)
 
 -- Hotkey for toggling a train between automatic and manual.
 local function toggle_train_control(event)
-    local player = game.players[event.player_index]
-    local train = player.vehicle and player.vehicle.train
-    if train and not (player.selected and player.selected.type == 'train-stop') then
+    local player = game.get_player(event.player_index)
+    local vehicle = player.vehicle
+    local selected = player.selected
+    local train = vehicle and player.vehicle.train or selected and selected.train
+
+    if train and not (selected and selected.type == 'train-stop') then
         train.manual_mode = not train.manual_mode
         local text = train.manual_mode and {'vehicles.manual-mode'} or {'vehicles.automatic-mode'}
         if not train.manual_mode then
@@ -132,7 +138,7 @@ local function toggle_train_control(event)
         end
         player.create_local_flying_text {
             text = text,
-            position = player.vehicle.position,
+            position = vehicle and vehicle.position or selected and selected.position,
             color = defines.color.green
         }
     end
@@ -143,14 +149,15 @@ Event.register('picker-toggle-train-control', toggle_train_control)
 -- the train has 1 or fewer stations.
 local function goto_station(event)
     local player = game.players[event.player_index]
-    if player.selected and player.selected.type == 'train-stop' then
-        local train = player.vehicle and player.vehicle.train
-        local stop = player.selected
+    local selected = player.selected
+    if selected and selected.type == 'train-stop' then
+        local vehicle = player.vehicle
+        local train = vehicle and vehicle.train
         if train and (train.schedule and #train.schedule.records or 0) <= 1 then
             train.schedule = {
                 current = 1,
                 records = {
-                    [1] = {time_to_wait = 999, station = stop.backer_name}
+                    [1] = {time_to_wait = 999, station = selected.backer_name}
                 }
             }
             train.manual_mode = false
@@ -344,3 +351,20 @@ if settings.startup['picker-manual-train-keys'].value then
     local keys = {'picker-up-event', 'picker-down-event', 'picker-left-event', 'picker-right-event'}
     Event.register(keys, set_to_manual)
 end
+
+local function get_out_of_the_way(event)
+    local entity = event.entity
+    if entity.type == 'character' and event.cause and event.cause.train then
+        if event.cause.force == entity.force and settings.global['picker-get-out-of-the-way'].value then
+            local pos = entity.surface.find_non_colliding_position('character', event.cause.position, 5, 0.5)
+            if pos then
+                entity.teleport(pos)
+                if entity.health == 0 then
+                    entity.health = 1
+                end
+                casey_jones(event)
+            end
+        end
+    end
+end
+Event.register(defines.events.on_entity_damaged, get_out_of_the_way)

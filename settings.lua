@@ -120,7 +120,34 @@ data:extend {
         minimum_value = 0.001,
         maximum_value = 100,
         order = '[startup]-a-[penalty]-j'
-      }
+      },
+      {
+        type = "double-setting",
+        name = "picker-temporary-stop-wait-time",
+        setting_type = "startup",
+        default_value = 60 * 5,
+        minimum_value = 0,
+        maximum_value = 100000000,
+        order = '[startup]-a-[penalty]-k'
+      },
+      {
+        type = "double-setting",
+        name = "picker-wait-condition-default",
+        setting_type = "startup",
+        default_value = 60 * 30,
+        minimum_value = 0,
+        maximum_value = 100000000,
+        order = '[startup]-a-[penalty]-l'
+      },
+      {
+        type = "double-setting",
+        name = "picker-inactivity-wait-condition-default",
+        setting_type = "startup",
+        default_value = 60 * 5,
+        minimum_value = 0,
+        maximum_value = 100000000,
+        order = '[startup]-a-[penalty]-m'
+      },
 }
 
 data:extend {

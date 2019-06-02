@@ -4,6 +4,7 @@ Date: ??????
   Features:
     - Using movement keys while in automatic mode sets the train to manual.
     - Friendly trains are somewhat safer (defaults to false).
+    - Default train wait times are adjustable.
 ---------------------------------------------------------------------------------------------------
 Version: 1.0.1
 Date: ??????

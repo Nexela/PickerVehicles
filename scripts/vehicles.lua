@@ -352,19 +352,19 @@ if settings.startup['picker-manual-train-keys'].value then
     Event.register(keys, set_to_manual)
 end
 
-local function get_out_of_the_way(event)
-    local entity = event.entity
-    if entity.type == 'character' and event.cause and event.cause.train then
-        if event.cause.force == entity.force and settings.global['picker-get-out-of-the-way'].value then
-            local pos = entity.surface.find_non_colliding_position('character', event.cause.position, 5, 0.5)
-            if pos then
-                entity.teleport(pos)
-                if entity.health == 0 then
-                    entity.health = 1
-                end
-                casey_jones(event)
-            end
-        end
-    end
+if settings.startup['picker-get-out-of-the-way'].value then
+	local function get_out_of_the_way(event)
+		local entity = event.entity
+		if entity.type == 'character' and event.cause and event.cause.train and event.cause.force == entity.force then
+			local pos = entity.surface.find_non_colliding_position('character', event.cause.position, 5, 0.5)
+			if pos then
+				entity.teleport(pos)
+				if entity.health == 0 then
+					entity.health = 1
+				end
+				casey_jones(event)
+			end
+		end
+	end
+	Event.register(defines.events.on_entity_damaged, get_out_of_the_way)
 end
-Event.register(defines.events.on_entity_damaged, get_out_of_the_way)

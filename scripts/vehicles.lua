@@ -282,9 +282,21 @@ local function casey_jones(event)
             volume = 1
         }
         attract_enemies(cause, 50)
+        -- Get out of the way
+        local character = game.get_player(event.player_index).character
+        local p_force, c_force = character.force, cause.force
+        if (character.force == cause.force or c_force.get_friend(p_force)) and settings.global['picker-get-out-of-the-way'].value then
+            local pos = cause.surface.find_non_colliding_position('character', event.cause.position, 5, 0.5)
+            if pos then
+                character.teleport(pos)
+                if character.health == 0 then
+                    character.health = 1
+                end
+            end
+        end
     end
 end
-Event.register(defines.events.on_player_died, casey_jones)
+Event.register(defines.events.on_pre_player_died, casey_jones)
 
 -- snap amount is the amount of different angles car can drive on,
 -- (360 / vehiclesnap_amount) is the difference between 2 axis
@@ -351,20 +363,3 @@ if settings.startup['picker-manual-train-keys'].value then
     local keys = {'picker-up-event', 'picker-down-event', 'picker-left-event', 'picker-right-event'}
     Event.register(keys, set_to_manual)
 end
-
-local function get_out_of_the_way(event)
-    local entity = event.entity
-    if entity.type == 'character' and event.cause and event.cause.train then
-        if event.cause.force == entity.force and settings.global['picker-get-out-of-the-way'].value then
-            local pos = entity.surface.find_non_colliding_position('character', event.cause.position, 5, 0.5)
-            if pos then
-                entity.teleport(pos)
-                if entity.health == 0 then
-                    entity.health = 1
-                end
-                casey_jones(event)
-            end
-        end
-    end
-end
-Event.register(defines.events.on_entity_damaged, get_out_of_the_way)

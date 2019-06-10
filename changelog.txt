@@ -1,4 +1,11 @@
 ---------------------------------------------------------------------------------------------------
+Version: 1.0.3
+Date: ??????
+  Bugfixes:
+    - Fixed bad perfomance with safe trains.
+  Changes:
+    - Allow 0 multiplier for pathfinder penalty.
+---------------------------------------------------------------------------------------------------
 Version: 1.0.2
 Date: ??????
   Features:

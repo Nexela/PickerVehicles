@@ -121,6 +121,15 @@ data:extend {
         maximum_value = 100,
         order = '[startup]-a-[penalty]-j'
       },
+     {
+        type = "int-setting",
+        name = "picker-no-path-penalty",
+        setting_type = "startup",
+        default_value = 1000,
+        minimum_value = 0,
+        maximum_value = 60000,
+        order = '[startup]-a-[penalty]-k'
+      },
       {
         type = "double-setting",
         name = "picker-temporary-stop-wait-time",
@@ -128,7 +137,7 @@ data:extend {
         default_value = 60 * 5,
         minimum_value = 0,
         maximum_value = 100000000,
-        order = '[startup]-a-[penalty]-k'
+        order = '[startup]-b-[conditon]-a'
       },
       {
         type = "double-setting",
@@ -137,7 +146,7 @@ data:extend {
         default_value = 60 * 30,
         minimum_value = 0,
         maximum_value = 100000000,
-        order = '[startup]-a-[penalty]-l'
+        order = '[startup]-b-[conditon]-b'
       },
       {
         type = "double-setting",
@@ -146,7 +155,7 @@ data:extend {
         default_value = 60 * 5,
         minimum_value = 0,
         maximum_value = 100000000,
-        order = '[startup]-a-[penalty]-m'
+        order = '[startup]-b-[conditon]-c'
       },
 }
 

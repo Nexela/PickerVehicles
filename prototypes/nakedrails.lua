@@ -61,6 +61,7 @@ do --(( naked-rail
     PLANNER:copy('picker-naked-rail'):set_fields {
         order = 'a[train-system]-a[train]-z',
         icon = '__PickerVehicles__/graphics/nakedrails/naked-rails-icon.png',
+        icon_size = 32,
         place_result = 'picker-naked-straight-rail',
         straight_rail = 'picker-naked-straight-rail',
         curved_rail = 'picker-naked-curved-rail'
@@ -120,6 +121,7 @@ do --(( sleepy-rail
     PLANNER:copy('picker-sleepy-rail'):set_fields {
         order = 'a[train-system]-a[train]-z',
         icon = '__PickerVehicles__/graphics/nakedrails/sleepers-icon.png',
+        icon_size = 32,
         place_result = 'picker-sleepy-straight-rail',
         straight_rail = 'picker-sleepy-straight-rail',
         curved_rail = 'picker-sleepy-curved-rail'

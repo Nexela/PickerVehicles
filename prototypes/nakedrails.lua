@@ -62,6 +62,7 @@ do --(( naked-rail
         order = 'a[train-system]-a[train]-z',
         icon = '__PickerVehicles__/graphics/nakedrails/naked-rails-icon.png',
         icon_size = 32,
+        icon_mipmaps = 1,
         place_result = 'picker-naked-straight-rail',
         straight_rail = 'picker-naked-straight-rail',
         curved_rail = 'picker-naked-curved-rail'
@@ -122,6 +123,7 @@ do --(( sleepy-rail
         order = 'a[train-system]-a[train]-z',
         icon = '__PickerVehicles__/graphics/nakedrails/sleepers-icon.png',
         icon_size = 32,
+        icon_mipmaps = 1,
         place_result = 'picker-sleepy-straight-rail',
         straight_rail = 'picker-sleepy-straight-rail',
         curved_rail = 'picker-sleepy-curved-rail'
@@ -205,7 +207,8 @@ do --(( Selection Tools
                 shift = {6, -6}
             }
         },
-        icon_size = 32
+        icon_size = 32,
+        icon_mipmaps = 1
     }
 
     Data {
@@ -230,7 +233,8 @@ do --(( Selection Tools
                 scale = 0.75
             }
         },
-        icon_size = 32
+        icon_size = 32,
+        icon_mipmaps = 1,
     }
 
     Data {
@@ -256,7 +260,8 @@ do --(( Selection Tools
                 tint = {r = 1, g = 1, b = 1, a = 0.5}
             }
         },
-        icon_size = 32
+        icon_size = 32,
+        icon_mipmaps = 1
     }
 
     Data {
@@ -281,6 +286,7 @@ do --(( Selection Tools
                 scale = 0.7
             }
         },
-        icon_size = 32
+        icon_size = 32,
+        icon_mipmaps = 1,
     }
 end --))

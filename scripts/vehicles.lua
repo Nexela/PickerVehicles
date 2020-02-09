@@ -5,8 +5,7 @@
     Adds goto selected station hotkey when inside a train
     Adds toggle train mode hotkey
     Adds automatic train mode toggling
---]]
---[[
+
 	"name": "DelticHonk",
 	"title": "Deltic Honk",
 	"author": "Michael Cowgill (ChurchOrganist)",
@@ -32,6 +31,7 @@
     "homepage": "https://forums.factorio.com/viewtopic.php?f=92&t=25501",
     "description": "Snaps movement angle when driving cars or tanks.",
 --]]
+
 local Event = require('__stdlib__/stdlib/event/event')
 local Player = require('__stdlib__/stdlib/event/player')
 local interface = require('__stdlib__/stdlib/scripts/interface')

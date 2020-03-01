@@ -9,7 +9,7 @@
     "homepage": "",
     "description": "Vechicle related tweaks and features.",
     "package": {
-      "ignore": ["makefile"],
+      "ignore": [],
       "scripts": {
         "datestamp": "../PickerAtheneum/.publish/datestamp.sh",
         "prepackage": "../PickerAtheneum/.publish/prepackage.sh",

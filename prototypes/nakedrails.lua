@@ -35,29 +35,33 @@ if not settings.startup['picker-naked-rails'].value then
 end
 
 local PLANNER = Data('rail', 'rail-planner')
+
 local STRAIGHT = Data('straight-rail', 'straight-rail')
 local CURVED = Data('curved-rail', 'curved-rail')
-local SR = Data('straight-rail-remnants', 'rail-remnants')
-SR.time_before_removed = 1073741824
-SR.minable = {
-    hardness = 0.2,
-    mining_time = 1,
-    results = nil -- Not using results
-}
-SR.selectable_in_game = true
 
-local CR = Data('curved-rail-remnants', 'rail-remnants')
-CR.time_before_removed = 1073741824
-CR.minable = {
-    hardness = 0.2,
-    mining_time = 1,
-    results = nil -- not using results
-}
-CR.secondary_collision_box = { { -0.65, -2.43 }, { 0.65, 2.43 } }
-CR.selectable_in_game = true
---))
+local STRAIGHT_REMNANTS = Data('straight-rail-remnants', 'rail-remnants')
+local CURVED_REMNANTS = Data('curved-rail-remnants', 'rail-remnants')
 
-do --(( naked-rail
+do -- Adjust Remnant mining time and results
+    STRAIGHT_REMNANTS.time_before_removed = 1073741824
+    STRAIGHT_REMNANTS.minable = {
+        hardness = 0.2,
+        mining_time = 1,
+        results = nil -- Not using results
+    }
+    STRAIGHT_REMNANTS.selectable_in_game = true
+
+    CURVED_REMNANTS.time_before_removed = 1073741824
+    CURVED_REMNANTS.minable = {
+        hardness = 0.2,
+        mining_time = 1,
+        results = nil -- not using results
+    }
+    CURVED_REMNANTS.secondary_collision_box = {{-0.65, -2.43}, {0.65, 2.43}}
+    CURVED_REMNANTS.selectable_in_game = true
+end
+
+do
     PLANNER:copy('picker-naked-rail'):set_fields {
         order = 'a[train-system]-a[train]-z',
         icon = '__PickerVehicles__/graphics/nakedrails/naked-rails-icon.png',
@@ -68,57 +72,47 @@ do --(( naked-rail
         curved_rail = 'picker-naked-curved-rail'
     }:Flags():add('hidden')
 
-    --(( straight-rail
     local straight = STRAIGHT:copy('picker-naked-straight-rail', 'rail')
-
     straight.corpse = 'picker-naked-straight-rail-remnants'
     straight.pictures['rail_endings'].sheets[1].filename = '__PickerVehicles__/graphics/nakedrails/rail-endings-transparent.png'
     straight.pictures['rail_endings'].sheets[1].hr_version.filename = '__PickerVehicles__/graphics/nakedrails/hr-rail-endings-transparent.png'
-
     for _, id in ipairs(straight_picture_ids) do
         for _, element in ipairs(naked_subelements) do
             straight.pictures[id[1]][element].filename = string.format('__PickerVehicles__/graphics/nakedrails/%s-transparent.png', id[2])
             straight.pictures[id[1]][element].hr_version.filename = string.format('__PickerVehicles__/graphics/nakedrails/hr-%s-transparent.png', id[2])
         end
-    end --))
+    end
 
-    --(( curved-rail
+    local straight_remnants = STRAIGHT_REMNANTS:copy('picker-naked-straight-rail-remnants')
+    for _, id in ipairs(straight_picture_ids) do
+        for _, element in ipairs(naked_subelements) do
+            straight_remnants.pictures[id[1]][element].filename = string.format('__PickerVehicles__/graphics/nakedrails/%s-transparent.png', id[2])
+            straight_remnants.pictures[id[1]][element].hr_version.filename = string.format('__PickerVehicles__/graphics/nakedrails/hr-%s-transparent.png', id[2])
+        end
+    end
+
     local curved = CURVED:copy('picker-naked-curved-rail', 'rail')
+    curved.placeable_by = {{item = 'picker-naked-rail', count = 1}, table.deepcopy(curved.placeable_by)}
     curved.corpse = 'picker-naked-curved-rail-remnants'
     curved.pictures['rail_endings'].sheets[1].filename = '__PickerVehicles__/graphics/nakedrails/rail-endings-transparent.png'
     curved.pictures['rail_endings'].sheets[1].hr_version.filename = '__PickerVehicles__/graphics/nakedrails/hr-rail-endings-transparent.png'
-
     for _, id in ipairs(curved_picture_ids) do
         for _, element in ipairs(naked_subelements) do
             curved.pictures[id[1]][element].filename = string.format('__PickerVehicles__/graphics/nakedrails/%s-transparent.png', id[2])
             curved.pictures[id[1]][element].hr_version.filename = string.format('__PickerVehicles__/graphics/nakedrails/hr-%s-transparent.png', id[2])
         end
-    end --))
-end --))
+    end
 
-do --(( naked-remnants
-    --(( straight-rail
-    local straight = SR:copy('picker-naked-straight-rail-remnants')
-
-    for _, id in ipairs(straight_picture_ids) do
-        for _, element in ipairs(naked_subelements) do
-            straight.pictures[id[1]][element].filename = string.format('__PickerVehicles__/graphics/nakedrails/%s-transparent.png', id[2])
-            straight.pictures[id[1]][element].hr_version.filename = string.format('__PickerVehicles__/graphics/nakedrails/hr-%s-transparent.png', id[2])
-        end
-    end --))
-
-    --(( curved-rail
-    local curved = CR:copy('picker-naked-curved-rail-remnants')
-
+    local curved_remnants = CURVED_REMNANTS:copy('picker-naked-curved-rail-remnants')
     for _, id in ipairs(curved_picture_ids) do
         for _, element in ipairs(naked_subelements) do
-            curved.pictures[id[1]][element].filename = string.format('__PickerVehicles__/graphics/nakedrails/%s-transparent.png', id[2])
-            curved.pictures[id[1]][element].hr_version.filename = string.format('__PickerVehicles__/graphics/nakedrails/hr-%s-transparent.png', id[2])
+            curved_remnants.pictures[id[1]][element].filename = string.format('__PickerVehicles__/graphics/nakedrails/%s-transparent.png', id[2])
+            curved_remnants.pictures[id[1]][element].hr_version.filename = string.format('__PickerVehicles__/graphics/nakedrails/hr-%s-transparent.png', id[2])
         end
-    end --))
-end --))
+    end
+end
 
-do --(( sleepy-rail
+do
     PLANNER:copy('picker-sleepy-rail'):set_fields {
         order = 'a[train-system]-a[train]-z',
         icon = '__PickerVehicles__/graphics/nakedrails/sleepers-icon.png',
@@ -129,55 +123,45 @@ do --(( sleepy-rail
         curved_rail = 'picker-sleepy-curved-rail'
     }:Flags():add('hidden')
 
-    --(( straight-rail
     local straight = STRAIGHT:copy('picker-sleepy-straight-rail', 'rail')
     straight.corpse = 'picker-sleepy-straight-rail-remnants'
     straight.pictures['rail_endings'].sheets[1].filename = '__PickerVehicles__/graphics/nakedrails/rail-endings-transparent.png'
     straight.pictures['rail_endings'].sheets[1].hr_version.filename = '__PickerVehicles__/graphics/nakedrails/hr-rail-endings-transparent.png'
-
     for _, id in ipairs(straight_picture_ids) do
         for _, element in ipairs(sleepy_subelements) do
             straight.pictures[id[1]][element].filename = string.format('__PickerVehicles__/graphics/nakedrails/%s-transparent.png', id[2])
             straight.pictures[id[1]][element].hr_version.filename = string.format('__PickerVehicles__/graphics/nakedrails/hr-%s-transparent.png', id[2])
         end
-    end --))
+    end
 
-    --(( curved-rail
+    local straight_remnants = STRAIGHT_REMNANTS:copy('picker-sleepy-straight-rail-remnants')
+    for _, id in ipairs(straight_picture_ids) do
+        for _, element in ipairs(sleepy_subelements) do
+            straight_remnants.pictures[id[1]][element].filename = string.format('__PickerVehicles__/graphics/nakedrails/%s-transparent.png', id[2])
+            straight_remnants.pictures[id[1]][element].hr_version.filename = string.format('__PickerVehicles__/graphics/nakedrails/hr-%s-transparent.png', id[2])
+        end
+    end
+
     local curved = CURVED:copy('picker-sleepy-curved-rail', 'rail')
+    curved.placeable_by = {{item = 'picker-sleepy-rail', count = 1}, table.deepcopy(curved.placeable_by)}
     curved.corpse = 'picker-sleepy-curved-rail-remnants'
-
     curved.pictures['rail_endings'].sheets[1].filename = '__PickerVehicles__/graphics/nakedrails/rail-endings-transparent.png'
     curved.pictures['rail_endings'].sheets[1].hr_version.filename = '__PickerVehicles__/graphics/nakedrails/hr-rail-endings-transparent.png'
-
     for _, id in ipairs(curved_picture_ids) do
         for _, element in ipairs(sleepy_subelements) do
             curved.pictures[id[1]][element].filename = string.format('__PickerVehicles__/graphics/nakedrails/%s-transparent.png', id[2])
             curved.pictures[id[1]][element].hr_version.filename = string.format('__PickerVehicles__/graphics/nakedrails/hr-%s-transparent.png', id[2])
         end
-    end --))
-end --))
+    end
 
-do --(( sleepy-remnants
-    --(( straight-rail
-    local straight = SR:copy('picker-sleepy-straight-rail-remnants')
-
-    for _, id in ipairs(straight_picture_ids) do
-        for _, element in ipairs(sleepy_subelements) do
-            straight.pictures[id[1]][element].filename = string.format('__PickerVehicles__/graphics/nakedrails/%s-transparent.png', id[2])
-            straight.pictures[id[1]][element].hr_version.filename = string.format('__PickerVehicles__/graphics/nakedrails/hr-%s-transparent.png', id[2])
-        end
-    end --))
-
-    --(( curved-rail
-    local curved = CR:copy('picker-sleepy-curved-rail-remnants')
-
+    local curved_remnants = CURVED_REMNANTS:copy('picker-sleepy-curved-rail-remnants')
     for _, id in ipairs(curved_picture_ids) do
         for _, element in ipairs(sleepy_subelements) do
-            curved.pictures[id[1]][element].filename = string.format('__PickerVehicles__/graphics/nakedrails/%s-transparent.png', id[2])
-            curved.pictures[id[1]][element].hr_version.filename = string.format('__PickerVehicles__/graphics/nakedrails/hr-%s-transparent.png', id[2])
+            curved_remnants.pictures[id[1]][element].filename = string.format('__PickerVehicles__/graphics/nakedrails/%s-transparent.png', id[2])
+            curved_remnants.pictures[id[1]][element].hr_version.filename = string.format('__PickerVehicles__/graphics/nakedrails/hr-%s-transparent.png', id[2])
         end
-    end --))
-end --))
+    end
+end
 
 do --(( Selection Tools
     Data {
@@ -234,7 +218,7 @@ do --(( Selection Tools
             }
         },
         icon_size = 32,
-        icon_mipmaps = 1,
+        icon_mipmaps = 1
     }
 
     Data {
@@ -287,6 +271,6 @@ do --(( Selection Tools
             }
         },
         icon_size = 32,
-        icon_mipmaps = 1,
+        icon_mipmaps = 1
     }
 end --))

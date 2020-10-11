@@ -45,7 +45,6 @@ local CURVED_REMNANTS = Data('curved-rail-remnants', 'rail-remnants')
 do -- Adjust Remnant mining time and results
     STRAIGHT_REMNANTS.time_before_removed = 1073741824
     STRAIGHT_REMNANTS.minable = {
-        hardness = 0.2,
         mining_time = 1,
         results = nil -- Not using results
     }
@@ -53,7 +52,6 @@ do -- Adjust Remnant mining time and results
 
     CURVED_REMNANTS.time_before_removed = 1073741824
     CURVED_REMNANTS.minable = {
-        hardness = 0.2,
         mining_time = 1,
         results = nil -- not using results
     }
@@ -170,8 +168,6 @@ do --(( Selection Tools
         flags = {'hidden', 'only-in-cursor'},
         subgroup = 'transport',
         stack_size = 1,
-        stackable = false,
-        show_in_library = true,
         order = 'a[train-system]-y[naked-rails-stoneify]',
         selection_color = {r = 1, g = 1, b = 1, a = 0.2},
         alt_selection_color = {r = 0.5, g = 0.5, b = 0.5, a = 0.2},
@@ -201,8 +197,6 @@ do --(( Selection Tools
         flags = {'hidden', 'only-in-cursor'},
         subgroup = 'transport',
         stack_size = 1,
-        stackable = false,
-        show_in_library = true,
         order = 'a[train-system]-x[naked-rails-sleepify]',
         selection_color = {r = 1, g = 1, b = 1, a = 0.2},
         alt_selection_color = {r = 0.5, g = 0.5, b = 0.5, a = 0.2},
@@ -227,8 +221,6 @@ do --(( Selection Tools
         flags = {'hidden', 'only-in-cursor'},
         subgroup = 'transport',
         stack_size = 1,
-        stackable = false,
-        show_in_library = true,
         order = 'a[train-system]-w[naked-rails-nakedify]',
         selection_color = {r = 1, g = 1, b = 1, a = 0.2},
         alt_selection_color = {r = 0.5, g = 0.5, b = 0.5, a = 0.2},
@@ -254,8 +246,6 @@ do --(( Selection Tools
         flags = {'hidden', 'only-in-cursor'},
         subgroup = 'transport',
         stack_size = 1,
-        stackable = false,
-        show_in_library = true,
         order = 'a[train-system]-z[naked-rails-remnantify]',
         selection_color = {r = 1, g = 1, b = 1, a = 0.2},
         alt_selection_color = {r = 1, g = 0, b = 0},

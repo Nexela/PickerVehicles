@@ -21,7 +21,7 @@ local function on_selected_area(event)
     end
 
     if alt and event.item == 'picker-naked-rails-remnantify' then
-        for k, entity in pairs(event.entities) do
+        for _, entity in pairs(event.entities) do
             if entity.type == 'rail-remnants' then
                 entity.destroy()
             end
@@ -32,7 +32,7 @@ local function on_selected_area(event)
 
     local surface = event.entities and event.entities[1] and event.entities[1].surface
 
-    for k, entity in pairs(event.entities) do
+    for _, entity in pairs(event.entities) do
         if entity.type == 'straight-rail' and entity.name ~= replace_straight or entity.type == 'curved-rail' and entity.name ~= replace_curved or entity.name == 'straight-rail-remnants' or entity.name == 'curved-rail-remnants' then
             if entity.valid then
                 local n = entity.name

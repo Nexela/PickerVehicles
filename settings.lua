@@ -154,7 +154,7 @@ data:extend {
         default_value = 60 * 5,
         minimum_value = 0,
         maximum_value = 100000000,
-        order = '[startup]-b-[conditon]-c'
+        order = '[startup]-b-[condition]-c'
     }
 }
 
@@ -171,7 +171,7 @@ data:extend {
         name = 'picker-train-honk-type',
         setting_type = 'runtime-global',
         default_value = 'deltic',
-        allowed_values = {'deltic', 'train'},
+        allowed_values = { 'deltic', 'train' },
         order = 'picker-honk-ab'
     },
     {

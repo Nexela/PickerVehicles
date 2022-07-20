@@ -33,12 +33,13 @@
 --]]
 local Event = require('__stdlib__/stdlib/event/event')
 local Player = require('__stdlib__/stdlib/event/player')
+local Color = require('__stdlib__/stdlib/utils/color')
 local interface = require('__stdlib__/stdlib/scripts/interface')
 
 local function attract_enemies(entity, range)
     if settings.global['picker-train-honk-attract'].value then
         for _, enemy in pairs(entity.surface.find_enemy_units(entity.position, range)) do
-            enemy.set_command({type = defines.command.attack, target = entity, distraction = defines.distraction.by_damage})
+            enemy.set_command { type = defines.command.attack, target = entity, distraction = defines.distraction.by_damage }
         end
     end
 end
@@ -79,15 +80,16 @@ end
 -- then set to manual mode.
 local function on_player_driving_changed_state(event)
     local player = game.players[event.player_index]
-    if player.vehicle and player.vehicle.train and player.mod_settings['picker-auto-manual-train'].value then
-        local train = player.vehicle.train
+    local vehicle = player.vehicle
+    local train = vehicle and vehicle.train
+    if train and player.mod_settings['picker-auto-manual-train'].value then
         --Set train to manual
         if #train.passengers == 1 and available_train(train) then
             player.vehicle.train.manual_mode = true
             player.create_local_flying_text {
-                text = {'vehicles.manual-mode'},
+                text = { 'vehicles.manual-mode' },
                 position = player.vehicle.position,
-                color = defines.color.green
+                color = Color.color.green
             }
         end
     end
@@ -103,6 +105,7 @@ local function goto_next_station(event)
 
     if train and not (selected and selected.type == 'train-stop') then
         local schedule = train.schedule
+        if not schedule then return end
         local stops = #schedule.records
         if stops > 0 then
             if schedule.current < stops then
@@ -114,9 +117,9 @@ local function goto_next_station(event)
             train.schedule = schedule
             train.manual_mode = false
             player.create_local_flying_text {
-                text = {'vehicles.next-station', station_name},
+                text = { 'vehicles.next-station', station_name },
                 position = vehicle and vehicle.position or selected and selected.position,
-                color = defines.color.green
+                color = Color.color.green
             }
         end
     end
@@ -132,11 +135,11 @@ local function toggle_train_control(event)
 
     if train and not (selected and selected.type == 'train-stop') then
         train.manual_mode = not train.manual_mode
-        local text = train.manual_mode and {'vehicles.manual-mode'} or {'vehicles.automatic-mode'}
+        local text = train.manual_mode and { 'vehicles.manual-mode' } or { 'vehicles.automatic-mode' }
         player.create_local_flying_text {
             text = text,
             position = vehicle and vehicle.position or selected and selected.position,
-            color = defines.color.green
+            color = Color.color.green
         }
     end
 end
@@ -154,7 +157,7 @@ local function goto_station(event)
             train.schedule = {
                 current = 1,
                 records = {
-                    [1] = {time_to_wait = 999, station = selected.backer_name}
+                    [1] = { time_to_wait = 999, station = selected.backer_name }
                 }
             }
             train.manual_mode = false
@@ -181,24 +184,24 @@ local function wheres_my_car(event)
         pdata.last_car = selected
     elseif event.input_name and pdata.last_car and pdata.last_car.valid and player.surface == pdata.last_car.surface then
         if not (pdata.car_finder_beam and pdata.car_finder_beam.valid) then
-            player.add_custom_alert(pdata.last_car, {type = 'item', name = pdata.last_car.name}, {'vehicles.dude-wheres-my-car'}, true)
+            player.add_custom_alert(pdata.last_car, { type = 'item', name = pdata.last_car.name }, { 'vehicles.dude-wheres-my-car' }, true)
             pdata.car_finder_beam =
-                player.surface.create_entity(
-                {
-                    name = 'picker-pointer-beam',
-                    position = player.position, -- Can be any position, not used for beams, just can't be nil
-                    source = player.character,
-                    source_offset = {0, -1},
-                    target = pdata.last_car,
-                    duration = 2000000000
-                }
-            )
+            player.surface.create_entity
+            {
+                name = 'picker-pointer-beam',
+                position = player.position, -- Can be any position, not used for beams, just can't be nil
+                source = player.character,
+                source_offset = { 0, -1 },
+                target = pdata.last_car,
+                duration = 2000000000
+            }
+
         elseif pdata.car_finder_beam then
             remove_beam(pdata)
         end
     end
 end
-Event.register({'picker-dude-wheres-my-car', defines.events.on_player_driving_changed_state}, wheres_my_car)
+Event.register({ 'picker-dude-wheres-my-car', defines.events.on_player_driving_changed_state }, wheres_my_car)
 
 -- Trains honk when in automatic mode when starting or stopping.
 local function attempt_honk(event)
@@ -233,17 +236,17 @@ local function manual_honk(event)
     if vehicle then
         if vehicle.type == 'locomotive' then
             local sound = settings.global['picker-train-honk-type'].value
-            if vehicle.train.manual_mode then
-                local train = vehicle.train
+            local train = vehicle.train --[[@as LuaTrain]]
+            if train.manual_mode then
                 if train.speed == 0 then
                     vehicle.surface.play_sound {
-                        path = sound .. '-start',
+                        path = sound .. '-start' --[[@as SoundPath]] ,
                         position = vehicle.position,
                         volume = 1
                     }
                 else
                     vehicle.surface.play_sound {
-                        path = sound .. '-stop',
+                        path = sound .. '-stop' --[[@as SoundPath]] ,
                         position = vehicle.position,
                         volume = 1
                     }
@@ -270,6 +273,7 @@ local function manual_honk(event)
 end
 Event.register('picker-honk', manual_honk)
 
+---@param event EventData.on_pre_player_died
 local function casey_jones(event)
     local cause = event.cause
     if cause and consist[cause.type] then
@@ -281,13 +285,14 @@ local function casey_jones(event)
         attract_enemies(cause, 50)
         -- Get out of the way
         local character = game.get_player(event.player_index).character
+        if not character then return end
         local p_force, c_force = character.force, cause.force
         if (character.force == cause.force or c_force.get_friend(p_force)) and settings.global['picker-get-out-of-the-way'].value then
             local pos = cause.surface.find_non_colliding_position('character', event.cause.position, 5, 0.5)
             if pos then
                 character.teleport(pos)
                 if character.health == 0 then
-                    character.health = 1
+                    character.health = 1.0
                 end
             end
         end
@@ -300,7 +305,7 @@ Event.register(defines.events.on_pre_player_died, casey_jones)
 -- car will slowly turn towards such angle axis
 local SNAP_AMOUNT = 16
 
-Player.additional_data {snap = true}
+Player.additional_data { snap = true }
 
 local function snap_vehicle(event)
     if not global.disable_snapping then
@@ -326,9 +331,9 @@ Event.register(defines.events.on_player_changed_position, snap_vehicle)
 local function toggle_snap(command)
     local player, pdata = Player.get(command.player_index)
     pdata.snap = not pdata.snap
-    player.print({'vehicles.snapping', tostring(pdata.snap)})
+    player.print { 'vehicles.snapping', tostring(pdata.snap) }
 end
-commands.add_command('snap', 'snapdriving', toggle_snap)
+commands.add_command('snap', 'snap driving', toggle_snap)
 
 function interface.disable_snapping(bool)
     global.disable_snapping = bool or false
@@ -352,12 +357,12 @@ local function set_to_manual(event)
             end
             train.manual_mode = true
             player.create_local_flying_text {
-                text = {'vehicles.manual-mode'},
+                text = { 'vehicles.manual-mode' },
                 position = vehicle.position,
-                color = defines.color.green
+                color = Color.color.green
             }
         end
     end
 end
-local keys = {'picker-up-event', 'picker-down-event', 'picker-left-event', 'picker-right-event'}
+local keys = { 'picker-up-event', 'picker-down-event', 'picker-left-event', 'picker-right-event' }
 Event.register(keys, set_to_manual)

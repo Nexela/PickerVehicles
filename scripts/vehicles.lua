@@ -36,6 +36,7 @@ local Player = require('__stdlib__/stdlib/event/player')
 local Color = require('__stdlib__/stdlib/utils/color')
 local interface = require('__stdlib__/stdlib/scripts/interface')
 
+---@param entity LuaEntity
 local function attract_enemies(entity, range)
     if settings.global['picker-train-honk-attract'].value then
         for _, enemy in pairs(entity.surface.find_enemy_units(entity.position, range)) do
@@ -167,6 +168,7 @@ end
 Event.register('picker-goto-station', goto_station)
 
 -- Create a custom alert to help find the last car you were in.
+---@param pdata table
 local function remove_beam(pdata)
     if pdata.car_finder_beam and pdata.car_finder_beam.valid then
         pdata.car_finder_beam.destroy()
@@ -174,8 +176,9 @@ local function remove_beam(pdata)
     pdata.car_finder_beam = nil
 end
 
+---@param event EventData.on_player_driving_changed_state
 local function wheres_my_car(event)
-    local player, pdata = Player.get(event.player_index)
+    local player, pdata = Player.get(event.player_index) ---@type LuaPlayer, table
     local vehicle, selected = player.vehicle, player.selected
     if not event.input and vehicle and vehicle.type == 'car' then
         pdata.last_car = vehicle
@@ -204,6 +207,7 @@ end
 Event.register({ 'picker-dude-wheres-my-car', defines.events.on_player_driving_changed_state }, wheres_my_car)
 
 -- Trains honk when in automatic mode when starting or stopping.
+---@param event EventData.on_train_changed_state
 local function attempt_honk(event)
     if honk_states[event.train.state] and settings.global['picker-train-honk'].value then
         local honk = settings.global['picker-train-honk-type'].value .. (event.name == defines.train_state.on_the_path and '-start' or '-stop')
@@ -307,9 +311,10 @@ local SNAP_AMOUNT = 16
 
 Player.additional_data { snap = true }
 
+---@param event EventData.on_player_changed_position
 local function snap_vehicle(event)
     if not global.disable_snapping then
-        local player, pdata = Player.get(event.player_index)
+        local player, pdata = Player.get(event.player_index) ---@type LuaPlayer, table
         if pdata.snap then
             local vehicle = player.vehicle
             if player and vehicle and vehicle.type == 'car' and vehicle.speed > 0.1 then
@@ -329,7 +334,7 @@ end
 Event.register(defines.events.on_player_changed_position, snap_vehicle)
 
 local function toggle_snap(command)
-    local player, pdata = Player.get(command.player_index)
+    local player, pdata = Player.get(command.player_index) ---@type LuaPlayer, table
     pdata.snap = not pdata.snap
     player.print { 'vehicles.snapping', tostring(pdata.snap) }
 end
